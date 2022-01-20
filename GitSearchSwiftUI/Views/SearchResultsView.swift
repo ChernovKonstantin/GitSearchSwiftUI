@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SearchResultsView: View {
     @StateObject var viewModel = SearchResultsViewModel()
+    @State private var searchText = ""
+    private var searchTimer: Timer?
     
     var body: some View {
         NavigationView {
@@ -17,9 +19,9 @@ struct SearchResultsView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(repo.fullName)
-                                .font(.title)
+                                .font(.title3)
                                 .bold()
-                                .lineLimit(2)
+                                .lineLimit(1)
                             HStack{
                                 Image(systemName: "star")
                                 Text(String(repo.stargazersCount ?? 0))
@@ -27,18 +29,27 @@ struct SearchResultsView: View {
                             }
                         }
                         Spacer()
-                        AsyncImage(url: URL(string: repo.owner.avatarUrl ?? "")) { image in
-                            image.resizable()
-                        } placeholder: {
-                            ProgressView()
+                        AvatarImageView(url: repo.owner.avatarUrl ?? "")
+                    }
+                    .onAppear() {
+                        if viewModel.repositories.last == repo,
+                           viewModel.canLoadMore {
+                            if searchText.isEmpty {
+                                viewModel.fetchRepos()
+                            } else {
+                                viewModel.fetchRepos(withName: searchText)
+                            }
                         }
-                        .frame(width: 50, height: 50)
                     }
                 }
             }
+            .searchable(text: $searchText)
             .navigationTitle("Search")
             .onAppear() {
                 viewModel.fetchRepos()
+            }
+            .onChange(of: searchText) {newValue in
+                    viewModel.fetchRepos(withName: newValue, searchPerformed: true)
             }
         }
         

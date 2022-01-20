@@ -10,6 +10,7 @@ import UIKit
 
 struct Owner: Codable {
     var avatarUrl: String?
+    var image: UIImage?
     
     enum CodingKeys: String, CodingKey {
         case avatarUrl = "avatar_url"

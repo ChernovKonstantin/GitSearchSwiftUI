@@ -39,4 +39,29 @@ struct APIService {
         }
         .resume()
     }
+    
+    func loadImages(urlString: String, completion: @escaping (Result<UIImage,APIError>) -> Void) {
+        guard let url = URL(string: urlString) else {
+            completion(.failure(.urlError))
+            return
+        }
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let responseStatus = response as? HTTPURLResponse, responseStatus.statusCode == 200 else {
+                completion(.failure(.responseStatusError))
+                return
+            }
+            guard error == nil else {
+                completion(.failure(.dataTaskError))
+                return
+            }
+            guard let data = data else {
+                completion(.failure(.dataError))
+                return
+            }
+                let image = UIImage(data: data)
+            guard let image = image else { return }
+                completion(.success(image))
+        }
+        .resume()
+    }
 }

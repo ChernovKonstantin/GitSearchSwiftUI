@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct RepositoryObject: Codable, Identifiable {
+struct RepositoryObject: Codable, Identifiable, Equatable {
+    
     var id = UUID().uuidString
     
     var fullName: String
@@ -27,5 +28,9 @@ struct RepositoryObject: Codable, Identifiable {
         case createdAt = "created_at"
         case forksCount = "forks_count"
         case stargazersCount = "stargazers_count"
+    }
+    
+    static func == (lhs: RepositoryObject, rhs: RepositoryObject) -> Bool {
+        lhs.id == rhs.id
     }
 }

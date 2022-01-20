@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		170AFDBA27985A20005A93BE /* AvatarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170AFDB927985A20005A93BE /* AvatarImageView.swift */; };
+		170AFDBC27985A43005A93BE /* AvatarImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170AFDBB27985A43005A93BE /* AvatarImageViewModel.swift */; };
 		17DE7DF32796F7D200962777 /* GitSearchSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE7DF22796F7D200962777 /* GitSearchSwiftUIApp.swift */; };
 		17DE7DF72796F7D500962777 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17DE7DF62796F7D500962777 /* Assets.xcassets */; };
 		17DE7DFA2796F7D500962777 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17DE7DF92796F7D500962777 /* Preview Assets.xcassets */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		170AFDB927985A20005A93BE /* AvatarImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarImageView.swift; sourceTree = "<group>"; };
+		170AFDBB27985A43005A93BE /* AvatarImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarImageViewModel.swift; sourceTree = "<group>"; };
 		17DE7DEF2796F7D200962777 /* GitSearchSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitSearchSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17DE7DF22796F7D200962777 /* GitSearchSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitSearchSwiftUIApp.swift; sourceTree = "<group>"; };
 		17DE7DF62796F7D500962777 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -44,6 +48,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		170AFDB827985A0E005A93BE /* UIHelper */ = {
+			isa = PBXGroup;
+			children = (
+				170AFDB927985A20005A93BE /* AvatarImageView.swift */,
+			);
+			path = UIHelper;
+			sourceTree = "<group>";
+		};
 		17DE7DE62796F7D200962777 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				17DE7E0C2797083400962777 /* SearchResultsView.swift */,
+				170AFDB827985A0E005A93BE /* UIHelper */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -113,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				17DE7E10279708AB00962777 /* SearchResultsViewModel.swift */,
+				170AFDBB27985A43005A93BE /* AvatarImageViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -187,6 +201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				170AFDBA27985A20005A93BE /* AvatarImageView.swift in Sources */,
 				17DE7E042796FA1A00962777 /* RepositoryObject.swift in Sources */,
 				17DE7E022796F9ED00962777 /* SearchResults.swift in Sources */,
 				17DE7E0D2797083400962777 /* SearchResultsView.swift in Sources */,
@@ -195,6 +210,7 @@
 				17DE7E09279703A100962777 /* APIService.swift in Sources */,
 				17DE7DF32796F7D200962777 /* GitSearchSwiftUIApp.swift in Sources */,
 				17DE7E0B279706FD00962777 /* APIError.swift in Sources */,
+				170AFDBC27985A43005A93BE /* AvatarImageViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
