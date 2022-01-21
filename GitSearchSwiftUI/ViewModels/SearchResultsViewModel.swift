@@ -7,40 +7,53 @@
 
 import Foundation
 import UIKit
-import SwiftUI
 
 class SearchResultsViewModel: ObservableObject {
     @Published var repositories: [RepositoryObject] = []
-    var cachedAvatars: [String: Image] = [:]
+    @Published var cachedAvatars: [String: UIImage] = [:]
+    @Published var isLoading = false
+    
     private var currentPage = 1
     private(set) var canLoadMore = true
     private var searchTimer: Timer?
     
-    func fetchRepos(withName: String = "", searchPerformed: Bool = false) {
+    func fetchRepos(withName: String = "", searchPerformed: Bool = false) async {
         let searchText = withName.isEmpty ? "swift" : withName
         if searchPerformed { currentPage = 1 }
         searchTimer?.invalidate()
         let seconds = searchPerformed ? 0.75 : 0
         let apiService = APIService(urlString: "https://api.github.com/search/repositories" + "?per_page=30&sort=stars&page=\(currentPage)&q=\(searchText)&order=desc")
         searchTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(seconds), repeats: false) { _ in
-            apiService.makeRequest() { [weak self] (result: Result<SearchResults, APIError>) in
-                switch result {
-                case .success(let searchResult):
+            self.isLoading = true
+            Task {
+                do {
+                    let response: SearchResults = try await apiService.makeRequest()
                     DispatchQueue.main.async {
                         if searchPerformed {
-                            self?.repositories = searchResult.items
+                            self.repositories = response.items
                         } else {
-                            self?.repositories.append(contentsOf: searchResult.items)
+                            self.repositories.append(contentsOf: response.items)
                         }
+                        self.isLoading = false
                     }
-                    if searchResult.items.count < searchResult.totalCount {
-                        self?.currentPage += 1
-                        self?.canLoadMore = true
-                    }
-                case .failure(let error):
-                    print(error)
+                    self.currentPage += 1
+                } catch  {
+                    print(error.localizedDescription)
                 }
             }
+        }
+    }
+    
+    func fetchImage(for url: String, userID: String) async {
+        guard cachedAvatars[userID] == nil else { return }
+        let apiService = APIService(urlString: url)
+        do {
+            let image = try await apiService.loadImage()
+            DispatchQueue.main.async {
+                self.cachedAvatars[userID] = image
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
