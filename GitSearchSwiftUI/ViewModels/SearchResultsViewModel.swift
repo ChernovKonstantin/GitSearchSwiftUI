@@ -17,6 +17,7 @@ class SearchResultsViewModel: ObservableObject {
     private(set) var canLoadMore = true
     private var searchTimer: Timer?
     
+    @MainActor
     func fetchRepos(withName: String = "", searchPerformed: Bool = false) async {
         let searchText = withName.isEmpty ? "swift" : withName
         if searchPerformed { currentPage = 1 }
@@ -28,14 +29,13 @@ class SearchResultsViewModel: ObservableObject {
             Task {
                 do {
                     let response: SearchResults = try await apiService.makeRequest()
-                    DispatchQueue.main.async {
-                        if searchPerformed {
-                            self.repositories = response.items
-                        } else {
-                            self.repositories.append(contentsOf: response.items)
-                        }
-                        self.isLoading = false
+                    if searchPerformed {
+                        self.repositories = response.items
+                    } else {
+                        self.repositories.append(contentsOf: response.items)
                     }
+                    self.canLoadMore = response.totalCount > self.repositories.count
+                    self.isLoading = false
                     self.currentPage += 1
                 } catch  {
                     print(error.localizedDescription)
@@ -44,14 +44,13 @@ class SearchResultsViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     func fetchImage(for url: String, userID: String) async {
         guard cachedAvatars[userID] == nil else { return }
         let apiService = APIService(urlString: url)
         do {
             let image = try await apiService.loadImage()
-            DispatchQueue.main.async {
-                self.cachedAvatars[userID] = image
-            }
+            self.cachedAvatars[userID] = image
         } catch {
             print(error.localizedDescription)
         }
